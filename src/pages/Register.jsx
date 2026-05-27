@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import Dashboard from "./Dashboard";
+import Home from "./Home";
 
 function Register() {
   const [nombre, setNombre] = useState("");
@@ -20,6 +22,11 @@ function Register() {
 
     const user = { nombre, apellido, email, password };
     localStorage.setItem("user", JSON.stringify(user));
+
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    users.push(user);
+    localStorage.setItem("users", JSON.stringify(users));
+
 
     Swal.fire({ icon: "success", title: "Usuario registrado" });
 
