@@ -84,14 +84,14 @@ function Dashboard() {
     Swal.fire({
       title: "Editar Reserva",
       html: `
-        <input 
+        <input
           id="nombre"
           class="swal2-input"
           placeholder="Nombre Cliente"
           value="${reserva.nombreCliente}"
         />
 
-        <input 
+        <input
           id="personas"
           type="number"
           class="swal2-input"
@@ -177,7 +177,7 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-100">
 
-      {/* NAVBAR */}
+
       <div className="bg-gray-900 text-white px-6 py-4 flex justify-between items-center shadow-lg">
 
         <h1 className="text-2xl font-bold">
@@ -205,7 +205,6 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* CONTENIDO */}
       <div className="max-w-7xl mx-auto px-6 py-10">
 
         {/* HEADER */}
@@ -307,7 +306,6 @@ function Dashboard() {
 
                     </td>
 
-                    {/* BOTONES */}
                     <td className="px-6 py-4">
 
                       <div className="flex flex-wrap justify-center gap-2">

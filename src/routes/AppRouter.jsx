@@ -11,13 +11,10 @@ function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* Rutas públicas */}
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
 
-        {/* Rutas privadas */}
         <Route
           path="/dashboard"
           element={

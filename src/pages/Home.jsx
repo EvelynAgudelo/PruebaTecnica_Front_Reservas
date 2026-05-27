@@ -6,7 +6,7 @@ function Home() {
     JSON.parse(localStorage.getItem("reservas")) || []
   );
 
-  // Finalizar reserva (PATCH)
+  // Finalizar reserva
   const finalizarReserva = (id) => {
     const nuevas = reservas.map(r =>
       r.id === id ? { ...r, estado: "Finalizada" } : r
@@ -15,7 +15,7 @@ function Home() {
     localStorage.setItem("reservas", JSON.stringify(nuevas));
   };
 
-  // Editar reserva (PUT)
+  // Editar reserva
   const editarReserva = (id) => {
     const reserva = reservas.find(r => r.id === id);
 
@@ -51,7 +51,7 @@ function Home() {
     });
   };
 
-  // Eliminar reserva (DELETE)
+  // Eliminar reserva
   const eliminarReserva = (id) => {
     Swal.fire({
       title: "¿Estás seguro de cancelar esta reserva?",
