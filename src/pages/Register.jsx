@@ -1,55 +1,48 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import Dashboard from "./Dashboard";
-import Home from "./Home";
 
 function Register() {
   const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [turno, setTurno] = useState("Mañana");
   const navigate = useNavigate();
 
   const handleRegister = (e) => {
     e.preventDefault();
 
-    if (!nombre || !apellido || !email || !password) {
-      Swal.fire({ icon: "error", title: "Campos obligatorios" });
+    if (!nombre || !email || !password) {
+      Swal.fire("Error", "Todos los campos son obligatorios", "error");
       return;
     }
 
-    const user = { nombre, apellido, email, password };
-    localStorage.setItem("user", JSON.stringify(user));
+    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+    usuarios.push({ nombre, email, password, turno });
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    users.push(user);
-    localStorage.setItem("users", JSON.stringify(users));
-
-
-    Swal.fire({ icon: "success", title: "Usuario registrado" });
-
-    navigate("/");
+    Swal.fire("Registrado", "Usuario creado correctamente", "success");
+    navigate("/login");
   };
 
   return (
-    <div className="flex justify-center items-center h-[80vh]">
-      <form onSubmit={handleRegister} className="bg-white p-8 rounded-xl shadow-lg w-80">
-        <h1 className="text-2xl font-bold mb-6 text-center">Registro</h1>
+    <div className="container mt-5">
+      <form onSubmit={handleRegister} className="card p-4 shadow w-50 mx-auto">
+        <h2 className="text-center mb-4">Registro</h2>
+        <input type="text" placeholder="Nombre" className="form-control mb-3"
+          onChange={(e) => setNombre(e.target.value)} />
+        <input type="email" placeholder="Email" className="form-control mb-3"
+          onChange={(e) => setEmail(e.target.value)} />
+        <input type="password" placeholder="Contraseña" className="form-control mb-3"
+          onChange={(e) => setPassword(e.target.value)} />
 
-        <input placeholder="Nombre" className="w-full p-2 border rounded mb-3" onChange={(e)=>setNombre(e.target.value)} />
-        <input placeholder="Apellido" className="w-full p-2 border rounded mb-3" onChange={(e)=>setApellido(e.target.value)} />
-        <input placeholder="Email" className="w-full p-2 border rounded mb-3" onChange={(e)=>setEmail(e.target.value)} />
-        <input type="password" placeholder="Contraseña" className="w-full p-2 border rounded mb-3" onChange={(e)=>setPassword(e.target.value)} />
+        <select className="form-select mb-3" onChange={(e) => setTurno(e.target.value)}>
+          <option value="Mañana">Mañana</option>
+          <option value="Tarde">Tarde</option>
+          <option value="Noche">Noche</option>
+        </select>
 
-        <button className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">
-          Registrarse
-        </button>
-
-        <p className="text-sm mt-4 text-center">
-          ¿Ya tienes cuenta? <Link to="/" className="text-blue-500">Login</Link>
-        </p>
+        <button className="btn btn-success w-100">Registrar</button>
       </form>
     </div>
   );

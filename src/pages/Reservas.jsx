@@ -1,62 +1,84 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function Reservas() {
-  const [reservas, setReservas] = useState(
-    JSON.parse(localStorage.getItem("reservas")) || []
-  );
-  const [nuevaReserva, setNuevaReserva] = useState({ cliente: "", fecha: "", hora: "" });
+  const [reserva, setReserva] = useState({
+    nombreCliente: "",
+    fechaHora: "",
+    cantidadPersonas: 1,
+    estado: "Confirmada",
+  });
 
-  const guardarReserva = () => {
-    const actualizadas = [...reservas, nuevaReserva];
-    setReservas(actualizadas);
-    localStorage.setItem("reservas", JSON.stringify(actualizadas));
-    setNuevaReserva({ cliente: "", fecha: "", hora: "" });
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setReserva({ ...reserva, [e.target.name]: e.target.value });
   };
 
-  const eliminarReserva = (index) => {
-    const actualizadas = reservas.filter((_, i) => i !== index);
-    setReservas(actualizadas);
-    localStorage.setItem("reservas", JSON.stringify(actualizadas));
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+    reservas.push(reserva);
+    localStorage.setItem("reservas", JSON.stringify(reservas));
+
+    Swal.fire({
+      icon: "success",
+      title: "Reserva creada",
+      text: "La reserva fue registrada correctamente",
+    });
+
+    navigate("/dashboard");
   };
 
   return (
-    <div className="container mt-4">
-      <h2 className="text-center">Reservas</h2>
-      <form className="card p-3 mb-4">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-xl"
+      >
+        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
+          Nueva Reserva
+        </h1>
+
         <input
           type="text"
-          placeholder="Cliente"
-          className="form-control mb-2"
-          value={nuevaReserva.cliente}
-          onChange={(e) => setNuevaReserva({ ...nuevaReserva, cliente: e.target.value })}
+          name="nombreCliente"
+          placeholder="Nombre del cliente"
+          className="w-full border p-3 rounded-lg mb-4"
+          onChange={handleChange}
         />
+
         <input
-          type="date"
-          className="form-control mb-2"
-          value={nuevaReserva.fecha}
-          onChange={(e) => setNuevaReserva({ ...nuevaReserva, fecha: e.target.value })}
+          type="datetime-local"
+          name="fechaHora"
+          className="w-full border p-3 rounded-lg mb-4"
+          onChange={handleChange}
         />
+
         <input
-          type="time"
-          className="form-control mb-2"
-          value={nuevaReserva.hora}
-          onChange={(e) => setNuevaReserva({ ...nuevaReserva, hora: e.target.value })}
+          type="number"
+          name="cantidadPersonas"
+          placeholder="Cantidad de personas"
+          className="w-full border p-3 rounded-lg mb-4"
+          onChange={handleChange}
         />
-        <button type="button" className="btn btn-primary" onClick={guardarReserva}>
-          Guardar Reserva
+
+        <select
+          name="estado"
+          className="w-full border p-3 rounded-lg mb-6"
+          onChange={handleChange}
+        >
+          <option value="Confirmada">Confirmada</option>
+          <option value="En Espera">En Espera</option>
+          <option value="Finalizada">Finalizada</option>
+        </select>
+
+        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition">
+          Registrar Reserva
         </button>
       </form>
-
-      <ul className="list-group">
-        {reservas.map((reserva, index) => (
-          <li key={index} className="list-group-item d-flex justify-content-between">
-            {reserva.cliente} - {reserva.fecha} {reserva.hora}
-            <button className="btn btn-danger btn-sm" onClick={() => eliminarReserva(index)}>
-              Eliminar
-            </button>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
